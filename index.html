@@ -473,52 +473,46 @@
       window.open("https://vocaroo.com/", "_blank");
     }
 
-    function saveResult() {
-      const name = document.getElementById("studentName").value.trim();
-      const className = document.getElementById("studentClass").value;
-      const vocaroo = document.getElementById("vocarooLink").value.trim();
-      const percent = getPercent();
-      const status = getStatus();
-      const dateTime = new Date().toLocaleString();
+   function saveResult() {
+  const m = getCurrentModule(); // IMPORTANT
 
-      if (!name || !className) {
-        alert("Please enter student name and class first.");
-        return;
-      }
+  const name = document.getElementById("studentName").value.trim();
+  const className = document.getElementById("studentClass").value;
+  const vocaroo = document.getElementById("vocarooLink").value.trim();
 
-      // Always save a copy in this browser first.
-      const localRecord = { name, className, score, total, percent, status, vocaroo, dateTime };
-      const saved = JSON.parse(localStorage.getItem("bm_year1_records") || "[]");
-      saved.push(localRecord);
-      localStorage.setItem("bm_year1_records", JSON.stringify(saved));
+  if (!name || !className) {
+    alert("Please enter student name and class first.");
+    return;
+  }
 
-      // Optional central Google Sheet saving through hidden Google Form.
-      if (GOOGLE_FORM_ACTION_URL && FORM_FIELDS.name) {
-        const formData = new FormData();
-        formData.append(FORM_FIELDS.name, name);
-        formData.append(FORM_FIELDS.className, className);
-        formData.append(FORM_FIELDS.score, String(score));
-        formData.append(FORM_FIELDS.total, String(total));
-        formData.append(FORM_FIELDS.percent, String(percent));
-        formData.append(FORM_FIELDS.status, status);
-        formData.append(FORM_FIELDS.vocaroo, vocaroo);
-        formData.append(FORM_FIELDS.dateTime, dateTime);
+  const percent = getPercent();
+  const status = getStatus();
+  const dateTime = new Date().toLocaleString();
 
-        // ✅ NEW FIELDS
-       formData.append("entry.1145985719", m.unit);
-       formData.append("entry.1936478213", m.skillCode);
-       formData.append("entry.47186875", m.skillName);
+  const formData = new FormData();
 
-        fetch(GOOGLE_FORM_ACTION_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: formData
-        });
-      }
+  formData.append("entry.1092728077", name);
+  formData.append("entry.1314632048", className);
+  formData.append("entry.776686397", String(score));
+  formData.append("entry.1798402421", String(total));
+  formData.append("entry.836687957", String(percent));
+  formData.append("entry.1559204106", status);
+  formData.append("entry.494914330", vocaroo);
+  formData.append("entry.174364908", dateTime);
 
-      alert("Result saved. Status: " + status + " (" + percent + "%)");
-    }
+  // NEW FIELDS
+  formData.append("entry.1145985719", m.unit);
+  formData.append("entry.1936478213", m.skillCode);
+  formData.append("entry.47186875", m.skillName);
 
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSclRTb7qu_zCWncXfr96BFU_BSXJDhiDwBFo8yq462Ge3uIHQ/formResponse", {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  });
+
+  alert("✅ Result saved!");
+}
     function resetAll() {
       score = 0;
       total = 0;
