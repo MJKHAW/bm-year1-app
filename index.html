@@ -106,6 +106,25 @@
 
     button:hover { background: #0d47a1; }
 
+    .big-action {
+      font-size: 24px;
+      padding: 20px 24px;
+      border-radius: 22px;
+    }
+
+    .reward {
+      background: #e8f5e9;
+      border: 3px solid #66bb6a;
+      color: #1b5e20;
+      padding: 14px;
+      border-radius: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 14px;
+      display: none;
+    }
+
     .green { background: #2e7d32; }
     .green:hover { background: #1b5e20; }
     .orange { background: #ef6c00; }
@@ -191,7 +210,7 @@
       <p class="small">Read the word. Then click the microphone and say the word clearly.</p>
       <div class="word-box" id="targetWord">baju</div>
       <div class="button-row">
-        <button onclick="startListening()">🎤 Say the Word</button>
+        <button class="big-action" onclick="startListening()">🎤 Say the Word</button>
         <button class="orange" onclick="nextWord()">➡️ Next Word</button>
       </div>
       <div class="result" id="voiceResult">Voice result will appear here.</div>
@@ -202,7 +221,7 @@
       <p class="small">Type the same word.</p>
       <input id="typedAnswer" placeholder="Type the word here" />
       <div class="button-row">
-        <button class="green" onclick="checkTyping()">✅ Check Typing</button>
+        <button class="green big-action" onclick="checkTyping()">✅ Check Typing</button>
       </div>
       <div class="result" id="typingResult"></div>
     </div>
@@ -213,7 +232,7 @@
       <div class="sentence-box" id="targetSentence">Saya makan nasi.</div>
       <input id="sentenceAnswer" placeholder="Type the sentence here" />
       <div class="button-row">
-        <button class="purple" onclick="checkSentence()">🧩 Check Sentence</button>
+        <button class="purple big-action" onclick="checkSentence()">🧩 Check Sentence</button>
         <button class="orange" onclick="nextSentence()">➡️ Next Sentence</button>
       </div>
       <div class="result" id="sentenceResult"></div>
@@ -235,6 +254,8 @@
     </div>
 
     <div id="levelBox" class="level near">Status: Start the activity</div>
+
+    <div id="rewardBox" class="reward">🎉 Great job! Keep going!</div>
 
     <div class="button-row">
       <button class="green" onclick="saveResult()">📊 Save Result</button>
@@ -349,6 +370,20 @@
       else if (status === "Hampir Menguasai") levelBox.classList.add("near");
       else if (status === "Belum Menguasai") levelBox.classList.add("not-yet");
       else levelBox.classList.add("near");
+
+      const rewardBox = document.getElementById("rewardBox");
+      if (total > 0 && percent >= 80) {
+        rewardBox.style.display = "block";
+        rewardBox.textContent = "🎉 Excellent! You are Menguasai!";
+      } else if (total > 0 && percent >= 50) {
+        rewardBox.style.display = "block";
+        rewardBox.textContent = "🌟 Good try! Keep practising!";
+      } else if (total > 0) {
+        rewardBox.style.display = "block";
+        rewardBox.textContent = "💪 Try again. You can do it!";
+      } else {
+        rewardBox.style.display = "none";
+      }
     }
 
     function startListening() {
