@@ -252,17 +252,17 @@
      * To save results to Google Sheet, create a hidden Google Form.
      * Then replace the settings below.
      *********************************************************/
-    const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSclRTb7qu_zCWncXfr96BFU_BSXJDhiDwBFo8yq462Ge3uIHQ/formResponse"; // Example: https://docs.google.com/forms/d/e/FORM_ID/formResponse
+    const GOOGLE_FORM_ACTION_URL = ""; // Example: https://docs.google.com/forms/d/e/FORM_ID/formResponse
 
     const FORM_FIELDS = {
-  name: "entry.1092728077",
-  className: "entry.1314632048",
-  score: "entry.776686397",
-  total: "entry.1798402421",
-  percent: "entry.836687957",
-  status: "entry.1559204106",
-  vocaroo: "entry.494914330",
-  dateTime: "entry.174364908"
+      name: "",       // Example: entry.111111111
+      className: "",  // Example: entry.222222222
+      score: "",      // Example: entry.333333333
+      total: "",      // Example: entry.444444444
+      percent: "",    // Example: entry.555555555
+      status: "",     // Example: entry.666666666
+      vocaroo: "",    // Example: entry.777777777
+      dateTime: ""    // Example: entry.888888888
     };
 
     const words = ["baju", "buku", "bola", "meja", "nasi", "susu", "mata", "kaki", "roti", "ikan"];
@@ -278,6 +278,10 @@
     let currentSentenceIndex = 0;
     let score = 0;
     let total = 0;
+
+    // Prevent repeated scoring for the same question.
+    // Example: student can retry "baju" many times, but score/total increases only once.
+    const answeredQuestions = new Set();
 
     function cleanText(text) {
       return text.toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
@@ -306,10 +310,16 @@
       updateSentence();
     }
 
-    function addScore(correct) {
+    function addScore(questionKey, correct) {
+      if (answeredQuestions.has(questionKey)) {
+        return false; // already counted before
+      }
+
+      answeredQuestions.add(questionKey);
       total++;
       if (correct) score++;
       updateScoreBoard();
+      return true;
     }
 
     function getPercent() {
@@ -360,12 +370,18 @@
         const spokenText = cleanText(event.results[0][0].transcript);
         const target = cleanText(words[currentWordIndex]);
 
+        const questionKey = "voice_word_" + currentWordIndex;
+
         if (spokenText === target) {
-          document.getElementById("voiceResult").textContent = "✅ Correct! I heard: " + spokenText;
-          addScore(true);
+          const counted = addScore(questionKey, true);
+          document.getElementById("voiceResult").textContent = counted
+            ? "✅ Correct! I heard: " + spokenText
+            : "✅ Correct! You already tried this question. Score not added again.";
         } else {
-          document.getElementById("voiceResult").textContent = "❌ Try again. I heard: " + spokenText + " | Correct word: " + target;
-          addScore(false);
+          const counted = addScore(questionKey, false);
+          document.getElementById("voiceResult").textContent = counted
+            ? "❌ Try again. I heard: " + spokenText + " | Correct word: " + target
+            : "❌ Try again. I heard: " + spokenText + " | Score not added again for this question.";
         }
       };
 
@@ -381,12 +397,18 @@
         document.getElementById("typingResult").textContent = "⚠️ Please type first.";
         return;
       }
+      const questionKey = "typing_word_" + currentWordIndex;
+
       if (typed === target) {
-        document.getElementById("typingResult").textContent = "✅ Correct spelling!";
-        addScore(true);
+        const counted = addScore(questionKey, true);
+        document.getElementById("typingResult").textContent = counted
+          ? "✅ Correct spelling!"
+          : "✅ Correct spelling! You already tried this question. Score not added again.";
       } else {
-        document.getElementById("typingResult").textContent = "❌ Try again. Correct word is: " + target;
-        addScore(false);
+        const counted = addScore(questionKey, false);
+        document.getElementById("typingResult").textContent = counted
+          ? "❌ Try again. Correct word is: " + target
+          : "❌ Try again. Score not added again for this question.";
       }
     }
 
@@ -397,12 +419,18 @@
         document.getElementById("sentenceResult").textContent = "⚠️ Please type the sentence first.";
         return;
       }
+      const questionKey = "sentence_" + currentSentenceIndex;
+
       if (typed === target) {
-        document.getElementById("sentenceResult").textContent = "✅ Correct sentence!";
-        addScore(true);
+        const counted = addScore(questionKey, true);
+        document.getElementById("sentenceResult").textContent = counted
+          ? "✅ Correct sentence!"
+          : "✅ Correct sentence! You already tried this question. Score not added again.";
       } else {
-        document.getElementById("sentenceResult").textContent = "❌ Try again. Correct sentence: " + sentences[currentSentenceIndex];
-        addScore(false);
+        const counted = addScore(questionKey, false);
+        document.getElementById("sentenceResult").textContent = counted
+          ? "❌ Try again. Correct sentence: " + sentences[currentSentenceIndex]
+          : "❌ Try again. Score not added again for this question.";
       }
     }
 
@@ -454,6 +482,7 @@
     function resetAll() {
       score = 0;
       total = 0;
+      answeredQuestions.clear();
       currentWordIndex = 0;
       currentSentenceIndex = 0;
       updateWord();
