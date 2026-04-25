@@ -504,6 +504,11 @@
         formData.append(FORM_FIELDS.vocaroo, vocaroo);
         formData.append(FORM_FIELDS.dateTime, dateTime);
 
+        // ✅ NEW FIELDS
+       formData.append("entry.1145985719", m.unit);
+       formData.append("entry.1936478213", m.skillCode);
+       formData.append("entry.47186875", m.skillName);
+
         fetch(GOOGLE_FORM_ACTION_URL, {
           method: "POST",
           mode: "no-cors",
