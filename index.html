@@ -3,166 +3,348 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BM Year 1 Reading App</title>
+  <title>BM Year 1 Learning App</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fdf6e3, #e3f2fd);
+      background: linear-gradient(135deg, #fff8e1, #e3f2fd, #fce4ec);
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      padding: 18px;
+      color: #263238;
     }
 
     .app {
-      max-width: 600px;
+      max-width: 760px;
       margin: auto;
       background: white;
-      border-radius: 25px;
-      padding: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.16);
+      border: 5px solid #bbdefb;
     }
 
     h1 {
       color: #1565c0;
-      font-size: 28px;
+      font-size: 32px;
+      margin: 8px 0;
+      text-align: center;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-top: 20px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .student-box, .card {
+      background: #f7fbff;
+      border-radius: 22px;
+      padding: 18px;
+      margin: 16px 0;
+      border: 2px solid #d7ecff;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    input, select {
+      font-size: 20px;
+      padding: 13px;
+      border-radius: 14px;
+      border: 2px solid #90caf9;
+      width: 100%;
+      margin-top: 6px;
     }
 
     .word-box {
-      font-size: 55px;
+      font-size: 64px;
       font-weight: bold;
       color: #2e7d32;
       background: #f1f8e9;
-      padding: 25px;
+      padding: 28px;
+      border-radius: 24px;
+      margin: 18px 0;
+      text-align: center;
+      border: 3px dashed #81c784;
+    }
+
+    .sentence-box {
+      font-size: 28px;
+      font-weight: bold;
+      color: #6a1b9a;
+      background: #f3e5f5;
+      padding: 22px;
       border-radius: 20px;
-      margin: 20px 0;
+      margin: 18px 0;
+      text-align: center;
     }
 
     button {
-      font-size: 18px;
-      padding: 14px 22px;
+      font-size: 19px;
+      font-weight: bold;
+      padding: 15px 20px;
       border: none;
-      border-radius: 15px;
-      margin: 8px;
+      border-radius: 16px;
+      margin: 7px 4px;
       cursor: pointer;
       background: #1976d2;
       color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.16);
     }
 
-    button:hover {
-      background: #0d47a1;
-    }
+    button:hover { background: #0d47a1; }
 
-    input {
-      font-size: 22px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 2px solid #90caf9;
-      width: 80%;
-      text-align: center;
-      margin-top: 10px;
-    }
+    .green { background: #2e7d32; }
+    .green:hover { background: #1b5e20; }
+    .orange { background: #ef6c00; }
+    .orange:hover { background: #e65100; }
+    .purple { background: #7b1fa2; }
+    .purple:hover { background: #4a148c; }
+    .red { background: #c62828; }
+    .red:hover { background: #8e0000; }
+
+    .button-row { text-align: center; }
 
     .result {
       font-size: 22px;
       font-weight: bold;
-      margin-top: 20px;
-      min-height: 40px;
+      margin-top: 15px;
+      min-height: 38px;
+      text-align: center;
     }
+
+    .score-board {
+      background: #fff3e0;
+      padding: 16px;
+      border-radius: 18px;
+      margin-top: 18px;
+      font-size: 20px;
+      text-align: center;
+      border: 2px solid #ffcc80;
+    }
+
+    .level {
+      font-size: 26px;
+      font-weight: bold;
+      padding: 16px;
+      border-radius: 20px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .mastered { background: #e8f5e9; color: #1b5e20; border: 3px solid #66bb6a; }
+    .not-yet { background: #ffebee; color: #b71c1c; border: 3px solid #ef5350; }
+    .near { background: #fff8e1; color: #e65100; border: 3px solid #ffb300; }
 
     .small {
       font-size: 14px;
       color: #555;
+      text-align: center;
+      line-height: 1.5;
     }
 
-    .score {
-      background: #fff3e0;
-      padding: 12px;
-      border-radius: 15px;
-      margin-top: 18px;
-      font-size: 18px;
+    .hidden { display: none; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 26px; }
+      .word-box { font-size: 50px; }
+      .sentence-box { font-size: 23px; }
+      button { width: 100%; margin: 7px 0; }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1>📘 BM Year 1 Reading App</h1>
-    <p>Read the word. Then click the microphone and say the word.</p>
+    <h1>📘 BM Year 1 Learning App</h1>
+    <p style="text-align:center; font-size:15px; color:#444; margin-top:-8px; font-style:italic;">
+      ✨ Created by Cikgu Khaw Mee Jia ✨
+    </p>
+    <div class="subtitle">Reading • Writing • Simple Sentences • Voice Practice</div>
 
-    <div class="word-box" id="targetWord">baju</div>
+    <div class="student-box">
+      <h2>👧 Student Information</h2>
+      <label>Student Name</label>
+      <input id="studentName" placeholder="Example: Ali" />
 
-    <button onclick="startListening()">🎤 Say the Word</button>
-    <button onclick="nextWord()">➡️ Next Word</button>
+      <label>Class</label>
+      <select id="studentClass">
+        <option value="">Choose class</option>
+        <option>1P</option><option>1I</option><option>1N</option><option>1H</option><option>1W</option>
+        <option>1A</option><option>1S</option><option>1T</option><option>1U</option><option>1K</option><option>1L</option><option>1G</option>
+      </select>
+    </div>
 
-    <div class="result" id="voiceResult">Voice result will appear here.</div>
+    <div class="card">
+      <h2>📖 Reading Word</h2>
+      <p class="small">Read the word. Then click the microphone and say the word clearly.</p>
+      <div class="word-box" id="targetWord">baju</div>
+      <div class="button-row">
+        <button onclick="startListening()">🎤 Say the Word</button>
+        <button class="orange" onclick="nextWord()">➡️ Next Word</button>
+      </div>
+      <div class="result" id="voiceResult">Voice result will appear here.</div>
+    </div>
 
-    <hr />
+    <div class="card">
+      <h2>✏️ Typing Practice</h2>
+      <p class="small">Type the same word.</p>
+      <input id="typedAnswer" placeholder="Type the word here" />
+      <div class="button-row">
+        <button class="green" onclick="checkTyping()">✅ Check Typing</button>
+      </div>
+      <div class="result" id="typingResult"></div>
+    </div>
 
-    <h2>✏️ Typing Practice</h2>
-    <p>Type the same word:</p>
-    <input id="typedAnswer" placeholder="Type here" />
-    <br />
-    <button onclick="checkTyping()">Check Typing</button>
+    <div class="card">
+      <h2>🧩 Simple Sentence</h2>
+      <p class="small">Type the correct sentence. Start with capital letter and use full stop.</p>
+      <div class="sentence-box" id="targetSentence">Saya makan nasi.</div>
+      <input id="sentenceAnswer" placeholder="Type the sentence here" />
+      <div class="button-row">
+        <button class="purple" onclick="checkSentence()">🧩 Check Sentence</button>
+        <button class="orange" onclick="nextSentence()">➡️ Next Sentence</button>
+      </div>
+      <div class="result" id="sentenceResult"></div>
+    </div>
 
-    <div class="result" id="typingResult"></div>
+    <div class="card">
+      <h2>🎤 Vocaroo Recording Evidence</h2>
+      <p class="small">For final assessment proof, student records reading in Vocaroo, then paste the link below.</p>
+      <div class="button-row">
+        <button class="red" onclick="openVocaroo()">🎙️ Open Vocaroo</button>
+      </div>
+      <label>Paste Vocaroo Link</label>
+      <input id="vocarooLink" placeholder="Paste Vocaroo link here" />
+    </div>
 
-    <div class="score">
-      ✅ Score: <span id="score">0</span> / <span id="total">0</span>
+    <div class="score-board">
+      ✅ Score: <span id="score">0</span> / <span id="total">0</span><br />
+      Percentage: <span id="percent">0</span>%
+    </div>
+
+    <div id="levelBox" class="level near">Status: Start the activity</div>
+
+    <div class="button-row">
+      <button class="green" onclick="saveResult()">📊 Save Result</button>
+      <button class="red" onclick="resetAll()">🔄 Reset</button>
     </div>
 
     <p class="small">
-      Note: Voice recognition works best in Google Chrome. Speak clearly in a quiet place.
+      Voice recognition works best in Google Chrome. Students should open this app using Chrome, not WhatsApp built-in browser.
     </p>
   </div>
 
   <script>
-    const words = [
-      "baju",
-      "buku",
-      "bola",
-      "meja",
-      "nasi",
-      "susu",
-      "mata",
-      "kaki",
-      "roti",
-      "ikan"
+    /*********************************************************
+     * OPTIONAL TEACHER RECORDING SETUP
+     * To save results to Google Sheet, create a hidden Google Form.
+     * Then replace the settings below.
+     *********************************************************/
+    const GOOGLE_FORM_ACTION_URL = ""; // Example: https://docs.google.com/forms/d/e/FORM_ID/formResponse
+
+    const FORM_FIELDS = {
+      name: "",       // Example: entry.111111111
+      className: "",  // Example: entry.222222222
+      score: "",      // Example: entry.333333333
+      total: "",      // Example: entry.444444444
+      percent: "",    // Example: entry.555555555
+      status: "",     // Example: entry.666666666
+      vocaroo: "",    // Example: entry.777777777
+      dateTime: ""    // Example: entry.888888888
+    };
+
+    const words = ["baju", "buku", "bola", "meja", "nasi", "susu", "mata", "kaki", "roti", "ikan"];
+    const sentences = [
+      "Saya makan nasi.",
+      "Ini buku Ali.",
+      "Bola itu biru.",
+      "Ibu beli roti.",
+      "Saya suka susu."
     ];
 
-    let currentIndex = 0;
+    let currentWordIndex = 0;
+    let currentSentenceIndex = 0;
     let score = 0;
     let total = 0;
 
     function cleanText(text) {
-      return text
-        .toLowerCase()
-        .replace(/[.,!?]/g, "")
-        .trim();
+      return text.toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ").trim();
     }
 
     function updateWord() {
-      document.getElementById("targetWord").textContent = words[currentIndex];
+      document.getElementById("targetWord").textContent = words[currentWordIndex];
       document.getElementById("voiceResult").textContent = "Voice result will appear here.";
       document.getElementById("typingResult").textContent = "";
       document.getElementById("typedAnswer").value = "";
     }
 
+    function updateSentence() {
+      document.getElementById("targetSentence").textContent = sentences[currentSentenceIndex];
+      document.getElementById("sentenceResult").textContent = "";
+      document.getElementById("sentenceAnswer").value = "";
+    }
+
     function nextWord() {
-      currentIndex = (currentIndex + 1) % words.length;
+      currentWordIndex = (currentWordIndex + 1) % words.length;
       updateWord();
+    }
+
+    function nextSentence() {
+      currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;
+      updateSentence();
     }
 
     function addScore(correct) {
       total++;
       if (correct) score++;
+      updateScoreBoard();
+    }
+
+    function getPercent() {
+      if (total === 0) return 0;
+      return Math.round((score / total) * 100);
+    }
+
+    function getStatus() {
+      const percent = getPercent();
+      if (total === 0) return "Start the activity";
+      if (percent >= 80) return "Menguasai";
+      if (percent >= 50) return "Hampir Menguasai";
+      return "Belum Menguasai";
+    }
+
+    function updateScoreBoard() {
+      const percent = getPercent();
+      const status = getStatus();
       document.getElementById("score").textContent = score;
       document.getElementById("total").textContent = total;
+      document.getElementById("percent").textContent = percent;
+
+      const levelBox = document.getElementById("levelBox");
+      levelBox.textContent = "Status: " + status;
+      levelBox.className = "level";
+      if (status === "Menguasai") levelBox.classList.add("mastered");
+      else if (status === "Hampir Menguasai") levelBox.classList.add("near");
+      else if (status === "Belum Menguasai") levelBox.classList.add("not-yet");
+      else levelBox.classList.add("near");
     }
 
     function startListening() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
       if (!SpeechRecognition) {
-        document.getElementById("voiceResult").textContent = "❌ Sorry, this browser does not support voice recognition. Please use Google Chrome.";
+        document.getElementById("voiceResult").textContent = "❌ This browser does not support voice recognition. Please use Google Chrome.";
         return;
       }
 
@@ -172,18 +354,17 @@
       recognition.maxAlternatives = 1;
 
       document.getElementById("voiceResult").textContent = "🎧 Listening... please say the word.";
-
       recognition.start();
 
       recognition.onresult = function(event) {
         const spokenText = cleanText(event.results[0][0].transcript);
-        const target = cleanText(words[currentIndex]);
+        const target = cleanText(words[currentWordIndex]);
 
         if (spokenText === target) {
           document.getElementById("voiceResult").textContent = "✅ Correct! I heard: " + spokenText;
           addScore(true);
         } else {
-          document.getElementById("voiceResult").textContent = "❌ Try again. I heard: " + spokenText;
+          document.getElementById("voiceResult").textContent = "❌ Try again. I heard: " + spokenText + " | Correct word: " + target;
           addScore(false);
         }
       };
@@ -195,8 +376,11 @@
 
     function checkTyping() {
       const typed = cleanText(document.getElementById("typedAnswer").value);
-      const target = cleanText(words[currentIndex]);
-
+      const target = cleanText(words[currentWordIndex]);
+      if (!typed) {
+        document.getElementById("typingResult").textContent = "⚠️ Please type first.";
+        return;
+      }
       if (typed === target) {
         document.getElementById("typingResult").textContent = "✅ Correct spelling!";
         addScore(true);
@@ -205,6 +389,80 @@
         addScore(false);
       }
     }
+
+    function checkSentence() {
+      const typed = cleanText(document.getElementById("sentenceAnswer").value);
+      const target = cleanText(sentences[currentSentenceIndex]);
+      if (!typed) {
+        document.getElementById("sentenceResult").textContent = "⚠️ Please type the sentence first.";
+        return;
+      }
+      if (typed === target) {
+        document.getElementById("sentenceResult").textContent = "✅ Correct sentence!";
+        addScore(true);
+      } else {
+        document.getElementById("sentenceResult").textContent = "❌ Try again. Correct sentence: " + sentences[currentSentenceIndex];
+        addScore(false);
+      }
+    }
+
+    function openVocaroo() {
+      window.open("https://vocaroo.com/", "_blank");
+    }
+
+    function saveResult() {
+      const name = document.getElementById("studentName").value.trim();
+      const className = document.getElementById("studentClass").value;
+      const vocaroo = document.getElementById("vocarooLink").value.trim();
+      const percent = getPercent();
+      const status = getStatus();
+      const dateTime = new Date().toLocaleString();
+
+      if (!name || !className) {
+        alert("Please enter student name and class first.");
+        return;
+      }
+
+      // Always save a copy in this browser first.
+      const localRecord = { name, className, score, total, percent, status, vocaroo, dateTime };
+      const saved = JSON.parse(localStorage.getItem("bm_year1_records") || "[]");
+      saved.push(localRecord);
+      localStorage.setItem("bm_year1_records", JSON.stringify(saved));
+
+      // Optional central Google Sheet saving through hidden Google Form.
+      if (GOOGLE_FORM_ACTION_URL && FORM_FIELDS.name) {
+        const formData = new FormData();
+        formData.append(FORM_FIELDS.name, name);
+        formData.append(FORM_FIELDS.className, className);
+        formData.append(FORM_FIELDS.score, String(score));
+        formData.append(FORM_FIELDS.total, String(total));
+        formData.append(FORM_FIELDS.percent, String(percent));
+        formData.append(FORM_FIELDS.status, status);
+        formData.append(FORM_FIELDS.vocaroo, vocaroo);
+        formData.append(FORM_FIELDS.dateTime, dateTime);
+
+        fetch(GOOGLE_FORM_ACTION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+      }
+
+      alert("Result saved. Status: " + status + " (" + percent + "%)");
+    }
+
+    function resetAll() {
+      score = 0;
+      total = 0;
+      currentWordIndex = 0;
+      currentSentenceIndex = 0;
+      updateWord();
+      updateSentence();
+      updateScoreBoard();
+      document.getElementById("vocarooLink").value = "";
+    }
+
+    updateScoreBoard();
   </script>
 </body>
 </html>
